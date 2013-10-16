@@ -134,9 +134,9 @@ double maxx;
 double miny;
 double maxy;
 QGraphicsScene *scene;
-double tim;
+double tm;
 void Draw() {
-    tim = clock() * 1./ CLOCKS_PER_SEC;
+    tm = clock() * 1./ CLOCKS_PER_SEC;
     scene->clear();
     //scene->addRect(-1000,-1000,1000, 1000, QPen(Qt::white), QBrush(Qt::white));
     //scene->addEllipse(-10,-10,20, 20, QPen(Qt::black), QBrush(Qt::red));
@@ -196,7 +196,7 @@ void Draw() {
     }
 
     scene->update();
-    cerr<<(clock() * 1./ CLOCKS_PER_SEC - tim)<<endl;
+    cerr<<(clock() * 1./ CLOCKS_PER_SEC - tm)<<endl;
 }
 
 
