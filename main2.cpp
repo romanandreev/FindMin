@@ -1,5 +1,6 @@
 #include<cstdio>
 #include<iostream>
+#include<ctime>
 #include<cmath>
 #include<vector>
 #include<algorithm>
@@ -293,13 +294,13 @@ struct Expression {
 const string Expression::symb = "+-*/()^";
 
 Expression F;
-
+int Fcnt;
 ld calcF(pnt p) {
     return F.calc(p);
 }
 pnt calcGoMin(pnt p) {
     pnt g(p.size());
-    for (int i = 0; i < (int)p.size(); i++) {
+    for (int i = 0; i < (int)p.size() && Fcnt < 1e6; i++) {
         if (fabs(p[i] - l0[i]) < eps) {
             pnt p1(p);
             p1[i] += eps1;
@@ -326,14 +327,17 @@ pnt calcGoMin(pnt p) {
 pnt hillClimbing(pnt p0) {
     ld h = 1e9;
     ld curF = calcF(p0);
-    for (int it = 0; it < 60; it++) {
-        while (1) {            
-            cerr<<p0<<" "<<curF<<endl;
+    for (int it = 0; it < 60 && Fcnt < 1e6; it++) {
+        while (Fcnt < 1e6) {            
+            //cerr<<p0<<" "<<curF<<endl;
             pnt g0 = calcGoMin(p0);
             g0 = g0 / length(g0);
             ld h1 = min(h, maxGo(p0, g0));    
             pnt p1 = p0 + h1 * g0;
             ld newF = calcF(p1);
+            if (fabs(newF - curF) < 1e-9) {
+                break;
+            }
             if (newF < curF) {
                 p0 = p1;
                 curF = newF;
@@ -348,10 +352,10 @@ pnt hillClimbing(pnt p0) {
 ld calcArgMin(pnt p, pnt g, ld maxh, int N) {
     ld minc = 0;
     ld minval = calcF(p);
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N && Fcnt < 1e6; i++) {
         ld l = maxh / N * i;
         ld r = maxh / N * (i + 1);
-        for (int j = 0; j < 60; j++) {
+        for (int j = 0; j < 60 && Fcnt < 1e6; j++) {
             ld m1 = (l * 2 + r) / 3;
             ld m2 = (l + r * 2) / 3;
             ld f1 = calcF(p + g * m1);
@@ -362,9 +366,9 @@ ld calcArgMin(pnt p, pnt g, ld maxh, int N) {
                 l = m1;
             }
         }
-        ld newf = calcF(p + g * l);
-        if (newf < minval) {
-            minval = newf;
+        ld newF = calcF(p + g * l);        
+        if (newF < minval) {
+            minval = newF;
             minc = l;
         }
     }
@@ -372,7 +376,7 @@ ld calcArgMin(pnt p, pnt g, ld maxh, int N) {
 }
 pnt hillClimbingWithArgMin(pnt p0, int Niter, int Ndiv) {
     ld curF = calcF(p0);
-    for (int it = 0; it < Niter; it++) {
+    for (int it = 0; it < Niter && Fcnt < 1e6; it++) {
 //        cerr<<p0<<" "<<curF<<endl;
         pnt g0 = calcGoMin(p0);
 //        cerr<<g0<<endl;
@@ -380,6 +384,9 @@ pnt hillClimbingWithArgMin(pnt p0, int Niter, int Ndiv) {
         ld h1 = calcArgMin(p0, g0, maxGo(p0, g0), Ndiv);    
         pnt p1 = p0 + h1 * g0;
         ld newF = calcF(p1);
+        if (fabs(newF - curF) < 1e-9) {
+            break;
+        }
         if (newF < curF) {
             p0 = p1;
             curF = newF;
@@ -389,6 +396,51 @@ pnt hillClimbingWithArgMin(pnt p0, int Niter, int Ndiv) {
     }
     return p0;
 }
+long long randl() {
+    return rand() + ((long long)rand() * RAND_MAX);
+}
+long long randl(int n) {
+    return randl() % n;
+}
+ld randd() {
+    return (ld)randl() / sqr(RAND_MAX);
+}
+ld randd(ld l, ld r) {
+    return l + (r - l) * randd();
+}
+
+
+pnt randomSearch(pnt p0, ld p, ld rd) {
+    ld curF = calcF(p0);
+    ld mn = curF;
+    pnt mnp = p0;
+    int cnt = 0;
+    while (cnt < 1e5 && Fcnt < 1e6) {
+        if (randd() < p) {
+            pnt np;
+            for (int i = 0; i < (int)p0.size(); i++) {
+                np.push_back(randd(max(l0[i], p0[i] - rd), min(r0[i], p0[i] + rd)));
+            }
+            p0 = np;
+            curF = calcF(p0);
+        } else {
+            pnt np;
+            for (int i = 0; i < (int)p0.size(); i++) {
+                np.push_back(randd(l0[i], r0[i]));
+            }
+            p0 = np;
+            curF = calcF(p0);
+        }
+        if (curF < mn) {
+            mn = curF;
+            mnp = p0;
+            cnt = 0;
+        }
+        cnt++;
+    }
+    return mnp;
+}
+
 pnt ravineMethod(pnt p0, pnt p1, int Niter, int Ndiv) {
     vector<pnt> v;
     v.push_back(p0);
@@ -398,7 +450,7 @@ pnt ravineMethod(pnt p0, pnt p1, int Niter, int Ndiv) {
         u.push_back(hillClimbingWithArgMin(v[i], 1, Ndiv));
     }
     ld h = 1;
-    for (int i = 2; i < Niter; i++) {
+    for (int i = 2; i < Niter && Fcnt < 1e6; i++) {
         h = h * 0.8;
         pnt u0 = u[u.size() - 2];
         pnt u1 = u[u.size() - 1];
@@ -407,12 +459,16 @@ pnt ravineMethod(pnt p0, pnt p1, int Niter, int Ndiv) {
         pnt u2 = u1 + (u0 - u1) / length(u0 - u1) * h * (val0 > val1 ? -1 : 1);
         v.push_back(u2);
         u.push_back(hillClimbingWithArgMin(v[i], 1, Ndiv));
+        if (fabs(calcF(u[i]) - calcF(u[i - 1])) < 1e-9) {
+            break;
+        }
     }
-    return v[(int)v.size() - 1];
+    return u[(int)u.size() - 1];
 }
 
 
 int main() {
+    srand(time(0));
     //finding min of function in [l0_i, r0_i]^n
     freopen("input.txt", "r", stdin);
     string s;
@@ -449,10 +505,11 @@ int main() {
         cin >> x;
         p1.push_back(x);
     }    
+    Fcnt = 0;
 //    pnt res = hillClimbing(p0);
 //    pnt res = hillClimbingWithArgMin(p0, 1000, 5);
-    pnt res = ravineMethod(p0, p1, 100, 10);
-
+//    pnt res = ravineMethod(p0, p1, 100, 10);
+    pnt res = randomSearch(p0, 0.95, 0.01 * (r0[0] - l0[0]));
     cerr << "F" << res << " = "<< calcF(res) << endl;
     return 0;
 }
