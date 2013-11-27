@@ -7,7 +7,6 @@
 class Function {
     public:
     int n;
-    string name;
     vector<string> var;
     virtual ld calc(point) {
         return 0;

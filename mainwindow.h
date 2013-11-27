@@ -2,33 +2,42 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-namespace Ui {
-class MainWindow;
-}
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QAction>
+#include <QMenu>
+#include <QMenuBar>
+#include <QApplication>
+#include <QMessageBox>
+#include "base.h"
+#include "myrand.h"
+#include "point.h"
+#include "function.h"
+#include "expression.h"
+#include "minimization.h"
+#include "methods.h"
+#include "functionandlimits.h"
+#include "drawwidget.h"
+//#include "changedialog.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    MainWindow();
     ~MainWindow();
-    void init();
-
 private slots:
-    void on_ExitButton_clicked();
+    void about();
+    void change_function();
+    //void change_method();
 
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_3_clicked();
-
-    void on_pushButton_5_clicked();
-
-    void on_pushButton_4_clicked();
-
-private:
-    Ui::MainWindow *ui;
+signals:
+    void changeFName(QString);
+private:        
+    void init_f();
+    FunctionAndLimits *FL;
+    DrawWidget *dw;
 };
 
 #endif // MAINWINDOW_H

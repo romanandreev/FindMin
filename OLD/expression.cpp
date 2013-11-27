@@ -14,7 +14,6 @@ bool Expression::goodVar(string s) {
     return !numb;           
 }
 Expression::Expression(string s0) {
-    name = s0;
     s = "";
     for (int i = 0; i < (int)s0.length(); i++) {
         if (s0[i] != ' ') {
