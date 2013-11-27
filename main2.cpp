@@ -46,13 +46,12 @@ int main() {
         cin >> x;
         p1.push_back(x);
     }    
-    minimization minim(F, l0, r0);
-//    Fcnt = 0;
-    point res = hillClimbing(p0);
+    minimization* minim = new hill_climbing(F, l0, r0, p0);
+    point res = minim->minimize();    
 //    point res = hillClimbingWithArgMin(p0, 1000, 5);
 //    point res = ravineMethod(p0, p1, 100, 10);
 //    point res = randomSearch(p0, 0.95, 0.01 * (r0[0] - l0[0]));
-    cerr << "F" << res << " = "<< minim.calcF(res) << endl;
+    cerr << "F" << res << " = "<< minim->calcF(res) << endl;
     delete F;   
     return 0;
 }

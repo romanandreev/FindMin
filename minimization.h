@@ -10,10 +10,11 @@ class minimization {
     point l0, r0;
     minimization(Function*);
     minimization(Function*, const point&, const point&);
-    point minimize();
+    virtual point minimize();    
     ld calcF(point p);
     ld maxGo(point p, point g);
     point calcGoMin(point p);
+    ld calcArgMin(point p, point g, ld maxh, int N);
 };
 
 #endif

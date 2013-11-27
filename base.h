@@ -9,7 +9,7 @@
 #include<cassert>
 
 using namespace std;
-typedef long double ld;
+typedef double ld;
 
 const ld eps = 1e-9;
 const ld eps1 = 1e-9;

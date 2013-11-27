@@ -7,11 +7,12 @@
 #include "myrand.h"
 
 
-point hillClimbing(point p0) {
+point hill_climbing::minimize() {
+	point p0 = start;
     ld h = 1e9;
     ld curF = calcF(p0);
-    for (int it = 0; it < 60 && Fcnt < 1e6; it++) {
-        while (Fcnt < 1e6) {            
+    for (int it = 0; it < 60 /*&& Fcnt < 1e6*/; it++) {
+        while (1/*Fcnt < 1e6*/) {            
             //cerr<<p0<<" "<<curF<<endl;
             point g0 = calcGoMin(p0);
             g0 = g0 / length(g0);
@@ -32,31 +33,7 @@ point hillClimbing(point p0) {
     }
     return p0;
 }           
-ld calcArgMin(point p, point g, ld maxh, int N) {
-    ld minc = 0;
-    ld minval = calcF(p);
-    for (int i = 0; i < N && Fcnt < 1e6; i++) {
-        ld l = maxh / N * i;
-        ld r = maxh / N * (i + 1);
-        for (int j = 0; j < 60 && Fcnt < 1e6; j++) {
-            ld m1 = (l * 2 + r) / 3;
-            ld m2 = (l + r * 2) / 3;
-            ld f1 = calcF(p + g * m1);
-            ld f2 = calcF(p + g * m2);
-            if (f1 < f2) {
-                r = m2;
-            } else {
-                l = m1;
-            }
-        }
-        ld newF = calcF(p + g * l);        
-        if (newF < minval) {
-            minval = newF;
-            minc = l;
-        }
-    }
-    return minc;
-}
+/*
 point hillClimbingWithArgMin(point p0, int Niter, int Ndiv) {
     ld curF = calcF(p0);
     for (int it = 0; it < Niter && Fcnt < 1e6; it++) {
@@ -136,5 +113,5 @@ point ravineMethod(point p0, point p1, int Niter, int Ndiv) {
         }
     }
     return u[(int)u.size() - 1];
-}
+} */
 

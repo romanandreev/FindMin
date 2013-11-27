@@ -1,0 +1,46 @@
+In file included from minimization.cpp:4:0:
+minimization.h: In static member function 'static ld minimization::calcF(point)':
+minimization.h:9:15: error: invalid use of member 'minimization::F' in static member function
+     Function* F;
+               ^
+minimization.cpp:18:14: error: from this location
+     return (*F)(p);
+              ^
+In file included from minimization.cpp:4:0:
+minimization.h: In static member function 'static ld minimization::maxGo(point, point)':
+minimization.h:10:11: error: invalid use of member 'minimization::l0' in static member function
+     point l0, r0;
+           ^
+minimization.cpp:27:36: error: from this location
+             res = min(res, (p[i] - l0[i]) / (-g[i]));
+                                    ^
+In file included from minimization.cpp:4:0:
+minimization.h:10:15: error: invalid use of member 'minimization::r0' in static member function
+     point l0, r0;
+               ^
+minimization.cpp:29:29: error: from this location
+             res = min(res, (r0[i] - p[i]) / (g[i]));
+                             ^
+In file included from minimization.cpp:4:0:
+minimization.h: In static member function 'static point minimization::calcGoMin(point)':
+minimization.h:10:11: error: invalid use of member 'minimization::l0' in static member function
+     point l0, r0;
+           ^
+minimization.cpp:39:25: error: from this location
+         if (fabs(p[i] - l0[i]) < eps) {
+                         ^
+In file included from minimization.cpp:4:0:
+minimization.h:10:15: error: invalid use of member 'minimization::r0' in static member function
+     point l0, r0;
+               ^
+minimization.cpp:47:25: error: from this location
+         if (fabs(p[i] - r0[i]) < eps) {
+                         ^
+minimization.cpp: In static member function 'static ld minimization::calcF(point)':
+minimization.cpp:19:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+methods.cpp: In member function 'virtual point hill_climbing::minimize()':
+methods.cpp:14:33: error: 'Fcnt' was not declared in this scope
+     for (int it = 0; it < 60 && Fcnt < 1e6; it++) {
+                                 ^

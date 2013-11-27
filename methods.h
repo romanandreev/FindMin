@@ -6,19 +6,20 @@
 #include "function.h"
 #include "minimization.h"
 
-ld maxGo(point p, point g);
+class hill_climbing : public minimization {
+	public:
+	hill_climbing(Function* F, const point& l0, const point& r0, const point& start) : minimization(F, l0, r0), start(start) {		
+	}
+	point start;
+	virtual point minimize();
+};
 
-point calcGoMin(point p);
-
-point hillClimbing(point p0);
-
-ld calcArgMin(point p, point g, ld maxh, int N);
-
+/*
 point hillClimbingWithArgMin(point p0, int Niter, int Ndiv);
-
 
 point randomSearch(point p0, ld p, ld rd);
 
 point ravineMethod(point p0, point p1, int Niter, int Ndiv);
+*/
 
 #endif

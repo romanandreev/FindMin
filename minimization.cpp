@@ -59,5 +59,29 @@ point minimization::calcGoMin(point p) {
     }
     return g;
 }
-
+ld minimization::calcArgMin(point p, point g, ld maxh, int N) {
+    ld minc = 0;
+    ld minval = calcF(p);
+    for (int i = 0; i < N /* && Fcnt < 1e6*/; i++) {
+        ld l = maxh / N * i;
+        ld r = maxh / N * (i + 1);
+        for (int j = 0; j < 60 /* && Fcnt < 1e6*/; j++) {
+            ld m1 = (l * 2 + r) / 3;
+            ld m2 = (l + r * 2) / 3;
+            ld f1 = calcF(p + g * m1);
+            ld f2 = calcF(p + g * m2);
+            if (f1 < f2) {
+                r = m2;
+            } else {
+                l = m1;
+            }
+        }
+        ld newF = calcF(p + g * l);        
+        if (newF < minval) {
+            minval = newF;
+            minc = l;
+        }
+    }
+    return minc;
+}
 
