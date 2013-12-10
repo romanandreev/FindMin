@@ -23,7 +23,8 @@ point hill_climbing::minimize() {
                 break;
             }
             if (newF < curF) {
-                p0 = p1;
+                emit getSeg(p0, p1);
+                p0 = p1;                
                 curF = newF;
             } else {
                 break;
@@ -32,7 +33,9 @@ point hill_climbing::minimize() {
         h /= 2;    
     }
     return p0;
-}           
+}
+
+
 /*
 point hillClimbingWithArgMin(point p0, int Niter, int Ndiv) {
     ld curF = calcF(p0);

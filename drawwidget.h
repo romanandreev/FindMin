@@ -21,21 +21,21 @@ class DrawWidget : public QWidget
 {
     Q_OBJECT
 public:
-    DrawWidget(FunctionAndLimits *_FL);
+    DrawWidget(FunctionAndLimits *_FL, minimization *_minim);
 
 signals:
     void mouseChangeC(QString);
     void mouseChangeV(QString);
 
 public slots:
-
+    void drawSeg(point a, point b);
 private:
-    QImage img;
+    QImage img, img2;
     QColor getColor(double);
     ld minval, maxval;
 public:
     FunctionAndLimits *FL;
-    //minimization* minim;
+    minimization* minim;
 
 protected:
     virtual void paintEvent(QPaintEvent*);

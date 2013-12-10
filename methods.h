@@ -12,6 +12,7 @@ class hill_climbing : public minimization {
 	}
 	point start;
 	virtual point minimize();
+
 };
 
 /*

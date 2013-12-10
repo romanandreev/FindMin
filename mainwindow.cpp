@@ -17,7 +17,9 @@ MainWindow::MainWindow()
    // cerr<<"!!"<<endl;
     init_f();
 
-    DrawWidget *dw = new DrawWidget(FL);
+    DrawWidget *dw = new DrawWidget(FL, minim);
+
+    connect(minim, SIGNAL(getSeg(point, point)), dw, SLOT(drawSeg(point, point)));
     right->setAlignment(Qt::AlignTop);
     right->addWidget(textC);
     right->addWidget(valC);
@@ -89,9 +91,13 @@ void MainWindow::init_f()
         FL->l0.push_back(l);
         FL->r0.push_back(r);
     }
+    point p0;
+    p0.push_back(3);
+    p0.push_back(4);
 
     emit changeFName(QString(FL->F->name.c_str()));
-    //minimization* minim = new hill_climbing(F, l0, r0, p0);
+    minim = new hill_climbing(FL->F, FL->l0, FL->r0, p0);
+
     //point res = minim->minimize();
 //    point res = hillClimbingWithArgMin(p0, 1000, 5);
 //    point res = ravineMethod(p0, p1, 100, 10);

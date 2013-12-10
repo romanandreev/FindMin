@@ -37,6 +37,7 @@ signals:
 private:        
     void init_f();
     FunctionAndLimits *FL;
+    minimization *minim;
     DrawWidget *dw;
 };
 

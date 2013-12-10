@@ -3,8 +3,10 @@
 #include "base.h"
 #include "point.h"
 #include "function.h"
+#include <QObject>
 
-class minimization {
+class minimization : public QObject{
+    Q_OBJECT
     public:
     Function* F;
     point l0, r0;
@@ -15,6 +17,8 @@ class minimization {
     ld maxGo(point p, point g);
     point calcGoMin(point p);
     ld calcArgMin(point p, point g, ld maxh, int N);
+signals:
+    void getSeg(point a, point b);
 };
 
 #endif

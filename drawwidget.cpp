@@ -3,11 +3,12 @@
 
 void DrawWidget::paintEvent(QPaintEvent*) {    
     QPainter outpainter(this);
-    outpainter.drawImage(0,0, img);
+    outpainter.drawImage(0,0, img2);
 }
 
 void DrawWidget::mousePressEvent(QMouseEvent* event){
     //resize(400, 400);
+    minim->minimize();
 }
 
 void DrawWidget::mouseMoveEvent(QMouseEvent* event){
@@ -66,14 +67,31 @@ void DrawWidget::resizeEvent(QResizeEvent *){
             img.setPixel(i, j, getColor(a[i][j]).rgb());
         }
     }
-
+    img2 = img;
 }
 
 
-DrawWidget::DrawWidget(FunctionAndLimits *_FL):FL(_FL)
+DrawWidget::DrawWidget(FunctionAndLimits *_FL, minimization *_minim):FL(_FL),minim(_minim)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setMinimumSize(300, 300);
     setMouseTracking(true);
 
+}
+
+
+void DrawWidget::drawSeg(point a, point b) {
+    //cerr<<"!!"<<endl;
+    int x1 = (ld)width() * (a[0] - FL->l0[0]) / (FL->r0[0] - FL->l0[0]);
+    int y1 = height() - 1 - floor((ld)height() * (a[1] - FL->l0[1]) / (FL->r0[1] - FL->l0[1]));
+    int x2 = (ld)width() * (b[0] - FL->l0[0]) / (FL->r0[0] - FL->l0[0]);
+    int y2 = height() - 1 - floor((ld)height() * (b[1] - FL->l0[1]) / (FL->r0[1] - FL->l0[1]));
+    cerr<<x1<<" "<<y1<<" "<<x2<<" "<<y2<<endl;
+    QPainter *printer = new QPainter(&img2);
+    //QPen *pen = new QPen;
+    //pen->setColor(QColor(0, 255, 0, 0));
+    printer->setPen(QColor(255, 0, 0));
+    printer->drawLine(x1, y1, x2, y2);
+    repaint();
+    delete printer;
 }
