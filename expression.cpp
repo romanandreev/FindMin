@@ -3,6 +3,13 @@
 #include "function.h"
 #include "expression.h"
 
+void Expression::myassert(bool x) {
+    if (!x) {
+        //cerr<<k<<endl;
+        throw k;
+    }
+}
+
 bool Expression::goodVar(string s) {
     bool numb = true;
     for (int i = 0; i < (int)s.size(); i++) {
@@ -14,6 +21,7 @@ bool Expression::goodVar(string s) {
     return !numb;           
 }
 Expression::Expression(string s0) {
+   // cerr<<"E "<<s0<<endl;
     name = s0;
     s = "";
     for (int i = 0; i < (int)s0.length(); i++) {
@@ -43,10 +51,11 @@ Expression::Expression(string s0) {
 }
 ld Expression::calc_term() {
  //   cerr<<"term"<<" "<<s[k]<<endl;
+    myassert(k < (int)s.size());
     if (s.at(k) == '(') {
         k++;
         ld res = calc_terms();
-        assert(s.at(k) == ')');
+        myassert(s.at(k) == ')');
         k++;
         return res; 
     }
@@ -55,9 +64,9 @@ ld Expression::calc_term() {
         ld stp = 1;
         bool was = false;
         while (k < (int)s.length() && symb.find(s.at(k)) == string::npos) {
-            assert((s.at(k) >= '0' && s.at(k) <= '9') || s.at(k) == '.');
+            myassert((s.at(k) >= '0' && s.at(k) <= '9') || s.at(k) == '.');
             if (s.at(k) == '.') {
-                assert(was == false);
+                myassert(was == false);
                 was = true;
             } else {
                 if (!was) {
@@ -79,7 +88,7 @@ ld Expression::calc_term() {
         if (k < (int)s.length() && s.at(k) == '(') {
             k++;
             ld res = calc_terms();
-            assert(s.at(k) == ')');
+            myassert(s.at(k) == ')');
             k++;
             if (f == "sin") {
                 return sin(res);
@@ -102,17 +111,17 @@ ld Expression::calc_term() {
             if (f == "sqrt") {
                 return sqrt(res);
             }
-            assert(false); 
+            myassert(false);
         } else {
             int it = lower_bound(var.begin(), var.end(), f) - var.begin();
             //cerr<<"("<<f<<")"<<endl;
-            assert(it < n && var[it] == f);
+            myassert(it < n && var[it] == f);
             return p[it];
         }
     }
-    assert(false);
+    myassert(false);
 }
-ld Expression::calc_stp() {    
+ld Expression::calc_stp() {
     ld res = calc_term();
     vector<ld> ls;
     ls.push_back(res);
@@ -134,7 +143,7 @@ ld Expression::calc_stp() {
     }
     return res;
 }
-ld Expression::calc_mterms() {    
+ld Expression::calc_mterms() {
     ld res = calc_stp();
     while (1) {
         if (k == (int)s.size()) {
@@ -155,7 +164,7 @@ ld Expression::calc_mterms() {
     }
     return res;
 }
-ld Expression::calc_terms() {    
+ld Expression::calc_terms() {
     ld res = calc_mterms();
     while (1) {
         if (k == (int)s.size()) {

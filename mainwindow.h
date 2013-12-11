@@ -18,7 +18,7 @@
 #include "methods.h"
 #include "functionandlimits.h"
 #include "drawwidget.h"
-//#include "changedialog.h"
+#include "changedialog.h"
 
 class MainWindow : public QMainWindow
 {
@@ -32,8 +32,7 @@ private slots:
     void change_function();
     //void change_method();
 
-signals:
-    void changeFName(QString);
+
 private:        
     void init_f();
     FunctionAndLimits *FL;

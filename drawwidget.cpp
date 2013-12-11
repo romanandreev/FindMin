@@ -8,6 +8,16 @@ void DrawWidget::paintEvent(QPaintEvent*) {
 
 void DrawWidget::mousePressEvent(QMouseEvent* event){
     //resize(400, 400);
+    //assert(false);
+    img2 = img;
+    ld x = FL->l0[0] + (FL->r0[0] - FL->l0[0]) * (event->x() + 0.5) / width();
+    ld y = FL->l0[1] + (FL->r0[1] - FL->l0[1]) * (height() - 1 - event->y() + 0.5) / height();
+    vector<point> vp;
+    point p;
+    p.push_back(x);
+    p.push_back(y);
+    vp.push_back(p);
+    minim->changeStart(vp);
     minim->minimize();
 }
 
@@ -41,6 +51,7 @@ QColor DrawWidget::getColor(double val) {
     }
 }
 void DrawWidget::resizeEvent(QResizeEvent *){    
+    emit changeFName(QString(FL->F->name.c_str()));
     img = QImage(width(), height(), QImage::Format_RGB32);
     int w = width();
     int h = height();
@@ -64,7 +75,17 @@ void DrawWidget::resizeEvent(QResizeEvent *){
     }
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; j++) {
-            img.setPixel(i, j, getColor(a[i][j]).rgb());
+            img.setPixel(i, j, getColor(a[i][j]).rgb());            
+        }
+    }
+    for (int i = 0; i < w; i++) {
+        for (int j = 0; j < h; j++) {
+            if (minval == a[i][j]) {
+                QPainter *printer = new QPainter(&img);
+                printer->setPen(QColor(204, 255, 0));
+                printer->drawEllipse(max(0, i - 3), max(0, j - 3), 6, 6);
+                delete printer;
+            }
         }
     }
     img2 = img;
@@ -86,7 +107,7 @@ void DrawWidget::drawSeg(point a, point b) {
     int y1 = height() - 1 - floor((ld)height() * (a[1] - FL->l0[1]) / (FL->r0[1] - FL->l0[1]));
     int x2 = (ld)width() * (b[0] - FL->l0[0]) / (FL->r0[0] - FL->l0[0]);
     int y2 = height() - 1 - floor((ld)height() * (b[1] - FL->l0[1]) / (FL->r0[1] - FL->l0[1]));
-    cerr<<x1<<" "<<y1<<" "<<x2<<" "<<y2<<endl;
+    //cerr<<x1<<" "<<y1<<" "<<x2<<" "<<y2<<endl;
     QPainter *printer = new QPainter(&img2);
     //QPen *pen = new QPen;
     //pen->setColor(QColor(0, 255, 0, 0));

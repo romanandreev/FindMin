@@ -8,9 +8,9 @@
 
 
 point hill_climbing::minimize() {
-	point p0 = start;
+    point p0 = start[0];
     ld h = 1e9;
-    ld curF = calcF(p0);
+    ld curF = calcF(p0);    
     for (int it = 0; it < 60 /*&& Fcnt < 1e6*/; it++) {
         while (1/*Fcnt < 1e6*/) {            
             //cerr<<p0<<" "<<curF<<endl;

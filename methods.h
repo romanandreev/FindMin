@@ -5,12 +5,15 @@
 #include "point.h"
 #include "function.h"
 #include "minimization.h"
+#include "functionandlimits.h"
 
 class hill_climbing : public minimization {
 	public:
-	hill_climbing(Function* F, const point& l0, const point& r0, const point& start) : minimization(F, l0, r0), start(start) {		
-	}
-	point start;
+
+    hill_climbing(FunctionAndLimits* FL, const point& _start) : minimization(FL) {
+        start.push_back(_start);
+	}	
+
 	virtual point minimize();
 
 };

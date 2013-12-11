@@ -26,7 +26,7 @@ public:
 signals:
     void mouseChangeC(QString);
     void mouseChangeV(QString);
-
+    void changeFName(QString);
 public slots:
     void drawSeg(point a, point b);
 private:

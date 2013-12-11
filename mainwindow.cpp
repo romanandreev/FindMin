@@ -13,11 +13,13 @@ MainWindow::MainWindow()
     QLabel *textF = new QLabel("<b>Current function:</b>");
     QLabel *valF = new QLabel("");
 
-    connect(this, SIGNAL(changeFName(QString)), valF, SLOT(setText(QString)));
+    //connect(this, SIGNAL(changeFName(QString)), valF, SLOT(setText(QString)));
+
    // cerr<<"!!"<<endl;
     init_f();
 
-    DrawWidget *dw = new DrawWidget(FL, minim);
+    dw = new DrawWidget(FL, minim);
+    connect(dw, SIGNAL(changeFName(QString)), valF, SLOT(setText(QString)));
 
     connect(minim, SIGNAL(getSeg(point, point)), dw, SLOT(drawSeg(point, point)));
     right->setAlignment(Qt::AlignTop);
@@ -50,7 +52,7 @@ MainWindow::MainWindow()
 
     changeMethod = new QAction(tr("Change &method"), this);
     changeMethod->setShortcut(QKeySequence(tr("Ctrl+M")));
-    connect(changeMethod, SIGNAL(triggered()), this, SLOT(change_method()));
+    //connect(changeMethod, SIGNAL(triggered()), this, SLOT(change_method()));
 
     aboutAction = new QAction(tr("&About"), this);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
@@ -95,8 +97,8 @@ void MainWindow::init_f()
     p0.push_back(3);
     p0.push_back(4);
 
-    emit changeFName(QString(FL->F->name.c_str()));
-    minim = new hill_climbing(FL->F, FL->l0, FL->r0, p0);
+    //emit changeFName(QString(FL->F->name.c_str()));
+    minim = new hill_climbing(FL, p0);
 
     //point res = minim->minimize();
 //    point res = hillClimbingWithArgMin(p0, 1000, 5);
@@ -108,10 +110,8 @@ void MainWindow::init_f()
 }
 
 void MainWindow::change_function() {
-    /*changeDialog change_dialog(this);
-    if (change_dialog.exec()) {
-        dw->resize(dw->width(), dw->height());
-    }*/
+    changeDialog* cd = new changeDialog(FL, dw);
+    cd->show();
 }
 
 MainWindow::~MainWindow()

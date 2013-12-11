@@ -4,9 +4,8 @@
 #include "myrand.h"
 #include "point.h"
 #include "function.h"
-#include "expression.h"
-#include "minimization.h"
-#include "methods.h"
+
+
 
 class FunctionAndLimits
 {
@@ -14,6 +13,7 @@ public:
     Function* F;
     point l0, r0;
     FunctionAndLimits();
+    FunctionAndLimits(Function* F, point l0, point r0);
 };
 
 #endif // FUNCTIONANDLIMITS_H
