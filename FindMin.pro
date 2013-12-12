@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     expression.cpp \
     base.cpp \
     functionandlimits.cpp \
-    changedialog.cpp
+    changedialog.cpp \
+    changedialog2.cpp
 
 HEADERS  += mainwindow.h \
     drawwidget.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     expression.h \
     base.h \
     functionandlimits.h \
-    changedialog.h
+    changedialog.h \
+    changedialog2.h
 
 OTHER_FILES += \
     input.txt

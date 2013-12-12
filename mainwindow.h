@@ -9,6 +9,8 @@
 #include <QMenuBar>
 #include <QApplication>
 #include <QMessageBox>
+#include <QComboBox>
+
 #include "base.h"
 #include "myrand.h"
 #include "point.h"
@@ -19,6 +21,7 @@
 #include "functionandlimits.h"
 #include "drawwidget.h"
 #include "changedialog.h"
+#include "changedialog2.h"
 
 class MainWindow : public QMainWindow
 {
@@ -30,14 +33,15 @@ public:
 private slots:
     void about();
     void change_function();
-    //void change_method();
-
+    void change_method();
+    void changeM(int);
 
 private:        
     void init_f();
     FunctionAndLimits *FL;
     minimization *minim;
     DrawWidget *dw;
+    QComboBox * combo;
 };
 
 #endif // MAINWINDOW_H

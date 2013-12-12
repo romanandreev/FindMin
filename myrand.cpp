@@ -11,8 +11,10 @@ long long randl(int n) {
     return randl() % n;
 }  */
 ld randd() {
-    return distribution(generator);
+    ld res = distribution(generator);
+    //cerr<<res<<endl;
+    return res;
 }
-ld randd(ld l, ld r) {
+ld randd(ld l, ld r) {    
     return l + (r - l) * randd();
 }

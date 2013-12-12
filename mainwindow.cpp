@@ -12,7 +12,12 @@ MainWindow::MainWindow()
     QLabel *valV = new QLabel("");
     QLabel *textF = new QLabel("<b>Current function:</b>");
     QLabel *valF = new QLabel("");
+    QLabel *textM = new QLabel("<b>Current minimization method:</b>");
+    combo = new QComboBox();
+    combo->addItem("Hill climbing");
+    combo->addItem("Random search");
 
+    QObject::connect(combo, SIGNAL(activated(int)),this, SLOT(changeM(int)));
     //connect(this, SIGNAL(changeFName(QString)), valF, SLOT(setText(QString)));
 
    // cerr<<"!!"<<endl;
@@ -29,6 +34,9 @@ MainWindow::MainWindow()
     right->addWidget(valV);
     right->addWidget(textF);
     right->addWidget(valF);
+    right->addWidget(textM);
+    right->addWidget(combo);
+
 
     valC->setMaximumWidth(max(textC->width(), textV->width()));
     valV->setMaximumWidth(max(textC->width(), textV->width()));
@@ -50,9 +58,9 @@ MainWindow::MainWindow()
     changeFunction->setShortcut(QKeySequence(tr("Ctrl+F")));
     connect(changeFunction, SIGNAL(triggered()), this, SLOT(change_function()));
 
-    changeMethod = new QAction(tr("Change &method"), this);
+    changeMethod = new QAction(tr("Change &method preferences"), this);
     changeMethod->setShortcut(QKeySequence(tr("Ctrl+M")));
-    //connect(changeMethod, SIGNAL(triggered()), this, SLOT(change_method()));
+    connect(changeMethod, SIGNAL(triggered()), this, SLOT(change_method()));
 
     aboutAction = new QAction(tr("&About"), this);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
@@ -98,8 +106,9 @@ void MainWindow::init_f()
     p0.push_back(4);
 
     //emit changeFName(QString(FL->F->name.c_str()));
-    minim = new hill_climbing(FL, p0);
-
+    //minim = new hill_climbing(FL, p0);
+    minim = new random_search(FL, p0);
+    combo->setCurrentIndex(minim->type - 1);
     //point res = minim->minimize();
 //    point res = hillClimbingWithArgMin(p0, 1000, 5);
 //    point res = ravineMethod(p0, p1, 100, 10);
@@ -112,6 +121,24 @@ void MainWindow::init_f()
 void MainWindow::change_function() {
     changeDialog* cd = new changeDialog(FL, dw);
     cd->show();
+}
+void MainWindow::change_method() {
+    changeDialog2* cd = new changeDialog2(minim, dw);
+    cd->show();
+}
+void MainWindow::changeM(int x) {
+    point p0;
+    p0.push_back(3);
+    p0.push_back(4);
+    x++;
+    if (x == 1) {
+        minim = new hill_climbing(FL, p0);
+    }
+    if (x == 2) {
+        minim = new random_search(FL, p0);
+    }
+    dw->minim = minim;
+    connect(minim, SIGNAL(getSeg(point, point)), dw, SLOT(drawSeg(point, point)));
 }
 
 MainWindow::~MainWindow()

@@ -10,16 +10,18 @@
 point hill_climbing::minimize() {
     point p0 = start[0];
     ld h = 1e9;
-    ld curF = calcF(p0);    
-    for (int it = 0; it < 60 /*&& Fcnt < 1e6*/; it++) {
-        while (1/*Fcnt < 1e6*/) {            
-            //cerr<<p0<<" "<<curF<<endl;
+    ld curF = calcF(p0);
+    int cnt = 0;
+    for (int it = 0; it < 60 && cnt < Fcnt; it++) {
+        while (cnt < Fcnt) {
             point g0 = calcGoMin(p0);
             g0 = g0 / length(g0);
             ld h1 = min(h, maxGo(p0, g0));    
             point p1 = p0 + h1 * g0;
             ld newF = calcF(p1);
-            if (fabs(newF - curF) < 1e-9) {
+            cnt++;
+            //cerr<<newF<<" "<<curF<<endl;
+            if (fabs(newF - curF) < Seps) {
                 break;
             }
             if (newF < curF) {
@@ -30,11 +32,41 @@ point hill_climbing::minimize() {
                 break;
             }
         }
+        cnt--;
         h /= 2;    
     }
     return p0;
 }
 
+
+point random_search::minimize() {
+    point p0 = start[0];
+    ld curF = calcF(p0);
+    ld mn = curF;
+    point mnp = p0;
+    int cnt = 0;        
+    while (cnt < Fcnt) {
+        point np;
+        if (randd() < prob) {            
+            for (int i = 0; i < (int)p0.size(); i++) {
+                np.push_back(randd(max(FL->l0[i], p0[i] - rd), min(FL->r0[i], p0[i] + rd)));
+            }                                    
+        } else {                        
+            for (int i = 0; i < (int)p0.size(); i++) {
+                np.push_back(randd(FL->l0[i], FL->r0[i]));
+            }                        
+        }        
+        ld curF = calcF(np);
+        if (curF < mn) {            
+            emit getSeg(p0, np);
+            mn = curF;
+            mnp = p0;            
+            p0 = np;
+        }
+        cnt++;
+    }
+    return mnp;
+}
 
 /*
 point hillClimbingWithArgMin(point p0, int Niter, int Ndiv) {
@@ -61,37 +93,6 @@ point hillClimbingWithArgMin(point p0, int Niter, int Ndiv) {
 }
 
 
-
-point randomSearch(point p0, ld p, ld rd) {
-    ld curF = calcF(p0);
-    ld mn = curF;
-    point mnp = p0;
-    int cnt = 0;
-    while (cnt < 1e5 && Fcnt < 1e6) {
-        if (randd() < p) {
-            point np;
-            for (int i = 0; i < (int)p0.size(); i++) {
-                np.push_back(randd(max(l0[i], p0[i] - rd), min(r0[i], p0[i] + rd)));
-            }
-            p0 = np;
-            curF = calcF(p0);
-        } else {
-            point np;
-            for (int i = 0; i < (int)p0.size(); i++) {
-                np.push_back(randd(l0[i], r0[i]));
-            }
-            p0 = np;
-            curF = calcF(p0);
-        }
-        if (curF < mn) {
-            mn = curF;
-            mnp = p0;
-            cnt = 0;
-        }
-        cnt++;
-    }
-    return mnp;
-}
 
 point ravineMethod(point p0, point p1, int Niter, int Ndiv) {
     vector<point> v;

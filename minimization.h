@@ -12,7 +12,7 @@ class minimization : public QObject{
     FunctionAndLimits* FL;
     vector<point> start;    
     minimization(FunctionAndLimits*);
-
+    int type = 0;
     virtual point minimize();    
     ld calcF(point p);
     ld maxGo(point p, point g);

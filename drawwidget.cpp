@@ -19,6 +19,7 @@ void DrawWidget::mousePressEvent(QMouseEvent* event){
     vp.push_back(p);
     minim->changeStart(vp);
     minim->minimize();
+    repaint();
 }
 
 void DrawWidget::mouseMoveEvent(QMouseEvent* event){
@@ -80,7 +81,7 @@ void DrawWidget::resizeEvent(QResizeEvent *){
     }
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; j++) {
-            if (minval == a[i][j]) {
+            if (fabs(minval - a[i][j]) < 1e-9) {
                 QPainter *printer = new QPainter(&img);
                 printer->setPen(QColor(204, 255, 0));
                 printer->drawEllipse(max(0, i - 3), max(0, j - 3), 6, 6);
